@@ -1,7 +1,10 @@
+import React from "react";
+import LandingPage from "./pages/LandingPage";
+
 function App() {
   return (
     <div>
-      <h1>Roomio Client</h1>
+      <LandingPage />
     </div>
   );
 }
