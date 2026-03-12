@@ -1,3 +1,10 @@
+import React from "react";
+import LandingPage from "./pages/LandingPage";
+
+function App() {
+  return (
+    <div>
+      <LandingPage />
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Login from "./Pages/Login.jsx";
