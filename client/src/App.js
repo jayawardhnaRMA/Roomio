@@ -1,37 +1,65 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 import Dashboard from "./pages/customer/Dashboard";
 import MyDesigns from "./pages/customer/MyDesigns";
 import Library from "./pages/customer/Library";
 import Inspiration from "./pages/customer/Inspiration";
 import Settings from "./pages/customer/Settings";
 
-const routeMap = {
-  dashboard: "/customer/dashboard",
-  Dashboard: "/customer/dashboard",
-  MyDesigns: "/customer/my-designs",
-  Library: "/customer/library",
-  Inspiration: "/customer/inspiration",
-  Settings: "/customer/settings",
-};
+function injectStyles() {
+  if (document.getElementById("roomio-transitions")) return;
+  const styleElement = document.createElement("style");
+  styleElement.id = "roomio-transitions";
+  styleElement.textContent = `
+    @keyframes page-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .rt-fade { animation: page-fade 0.4s ease both; }
+  `;
+  document.head.appendChild(styleElement);
+}
 
-export default function App() {
-  const navigate = useNavigate();
+function AppRoutes() {
+  const location = useLocation();
 
-  const handleNavigate = (page) => {
-    const targetPath = routeMap[page] || routeMap.dashboard;
-    navigate(targetPath);
-  };
+  useEffect(() => {
+    injectStyles();
+  }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/customer/dashboard" replace />} />
-      <Route path="/customer" element={<Navigate to="/customer/dashboard" replace />} />
-      <Route path="/customer/dashboard" element={<Dashboard onNavigate={handleNavigate} />} />
-      <Route path="/customer/my-designs" element={<MyDesigns onNavigate={handleNavigate} />} />
-      <Route path="/customer/library" element={<Library onNavigate={handleNavigate} />} />
-      <Route path="/customer/inspiration" element={<Inspiration onNavigate={handleNavigate} />} />
-      <Route path="/customer/settings" element={<Settings onNavigate={handleNavigate} />} />
-      <Route path="*" element={<Navigate to="/customer/dashboard" replace />} />
-    </Routes>
+    <div key={location.pathname} className="rt-fade">
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/home" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/customer" element={<Navigate to="/customer/dashboard" replace />} />
+        <Route path="/customer/dashboard" element={<Dashboard onNavigate={handleNavigate} />} />
+        <Route path="/customer/my-designs" element={<MyDesigns onNavigate={handleNavigate} />} />
+        <Route path="/customer/library" element={<Library onNavigate={handleNavigate} />} />
+        <Route path="/customer/inspiration" element={<Inspiration onNavigate={handleNavigate} />} />
+        <Route path="/customer/settings" element={<Settings onNavigate={handleNavigate} />} />
+
+
+
+
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
   );
 }
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
+}
+
+export default App;
